@@ -7,6 +7,15 @@ At the minimum it should have employee, order, sales, customer, and book entitie
 
 ## Question 2
 We want to create employee shifts, splitting up the day into morning and evening. Add this to the ERD.
+CREATE TABLE Employee_Shift (
+    Employee_shift_id INT PRIMARY KEY,
+    Employee_id INT,
+    Shift_date DATE,
+    Shift_type_morning VARCHAR(10), 
+    Shift_type_evening VARCHAR(10),
+    FOREIGN KEY (Employee_id) REFERENCES Employee(Employee_id));
+
+
 
 ## Question 3
 The store wants to keep customer addresses. Propose two architectures for the CUSTOMER_ADDRESS table, one that will retain changes, and another that will overwrite. Which is type 1, which is type 2?
@@ -17,6 +26,26 @@ Bonus: Are there privacy implications to this, why or why not?
 ```
 Your answer...
 ```
+Type 1 architecture would be to Overwrite
+CREATE TABLE CUSTOMER_ADDRESS_Type1 (
+    Customer_id INT PRIMARY KEY,
+    Address VARCHAR(255),
+    City VARCHAR(100),
+    State VARCHAR(100),
+    Zip_Code VARCHAR(20));
+
+Type 2 architecture would be to Retain changes 
+CREATE TABLE CUSTOMER_ADDRESS_Type2 (
+    Address_id INT PRIMARY KEY,
+    Customer_id INT,
+    Address VARCHAR(255),
+    City VARCHAR(100),
+    State VARCHAR(100),
+    Zip_Code VARCHAR(20),
+    Effective_date DATE,
+    End_date DATE);
+
+Both Type 1 and Type 2 architectures have privacy problems. There is a chance of inadvertent disclosure of personal information in type 1 if the overwritten address contains any sensitive data. For instance, if the customer moved and the address now belongs to a different person. Type 2 offers a higher risk of unauthorized access to private data, including former addresses and living arrangements, which could be misused. 
 
 ## Question 4
 Review the AdventureWorks Schema [here](https://i.stack.imgur.com/LMu4W.gif)
@@ -25,7 +54,7 @@ Highlight at least two differences between it and your ERD. Would you change any
 ```
 Your answer...
 ```
-
+My ERD for the small bookstore and AdventureWorks Schema ERD differs in two ways: scope and complexity, and the number of tables and schemas. Beyond simple sales operations, a wide range of functionalities and business processes are covered by the AdventureWorks schema. It has relationships and tables for purchasing, sales, people, production, and human resources. My ERD, in contrast, seems to have a more focused approach, with a simpler structure that is more suited to the needs of a small bookstore. It appears to be specifically focused on sales-related entities, such as customers, orders, employees, dates, and books.
 # Criteria
 
 [Assignment Rubric](./assignment_rubric.md)
